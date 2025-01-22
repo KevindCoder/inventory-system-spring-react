@@ -5,6 +5,7 @@ import com.klod.inventory_managment_system.model.dto.UserDTO;
 import com.klod.inventory_managment_system.model.entity.UserEntity;
 import com.klod.inventory_managment_system.repository.UserRepository;
 import com.klod.inventory_managment_system.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,16 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Integer id) {
         log.info("Deleting user by id: {}", id);
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDTO getUserByUsername(String username) {
+        log.info("Retrieving user by username: {}", username);
+
+        UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+
+        return userMapper.userToUserDto(userEntity);
     }
 
 
