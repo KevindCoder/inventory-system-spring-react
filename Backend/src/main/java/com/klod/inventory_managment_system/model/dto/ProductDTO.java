@@ -15,6 +15,4 @@ public class ProductDTO {
     private String weight;
     private Long providerId;
     private Long categoryId;
-    private Long createdBy;
-    private Long updatedBy;
 }

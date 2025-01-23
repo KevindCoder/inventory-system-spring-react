@@ -1,17 +1,22 @@
 package com.klod.inventory_managment_system.service;
 
 import com.klod.inventory_managment_system.model.dto.UserDTO;
+import com.klod.inventory_managment_system.model.dto.UserRequestDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface UserService {
-    UserDTO getUserById(Integer id);
+    UserDTO getUserById(Long id);
 
-    void saveUser(UserDTO userDTO);
+    UserDTO saveUser(UserRequestDTO userDTO);
+
+    UserDTO updateUser(Long userId, UserRequestDTO userDTO);
 
     List<UserDTO> getAllUsers();
 
-    void deleteUserById(Integer id);
+    void deleteUserById(Long id);
+
+    UserDTO getUserByUsername(String username);
 }

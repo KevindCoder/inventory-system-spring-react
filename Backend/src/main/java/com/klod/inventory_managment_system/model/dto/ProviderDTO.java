@@ -10,6 +10,4 @@ public class ProviderDTO {
     private String name;
     private String phoneNumber;
     private String email;
-    private Long createdBy;
-    private Long updatedBy;
 }

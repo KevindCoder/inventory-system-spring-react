@@ -14,6 +14,4 @@ public class CustomerDTO {
     private String address;
     private String state;
     private String city;
-    private Long createdBy;
-    private Long updatedBy;
 }

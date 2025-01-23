@@ -1,11 +1,19 @@
 package com.klod.inventory_managment_system.api;
 
 import com.klod.inventory_managment_system.model.dto.UserDTO;
+import com.klod.inventory_managment_system.model.dto.UserRequestDTO;
 import com.klod.inventory_managment_system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -18,7 +26,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         UserDTO userDTO = userService.getUserById(id);
         return ResponseEntity.ok(userDTO);
     }
@@ -32,16 +40,21 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Void> saveUser(@RequestBody UserDTO userDTO) {
-        userService.saveUser(userDTO);
-        return ResponseEntity.status(201).build(); // 201 Created
+    public ResponseEntity<UserDTO> saveUser(@RequestBody UserRequestDTO userDTO) {
+        UserDTO response = userService.saveUser(userDTO);
+        return ResponseEntity.status(201).body(response);
     }
 
-    //TODO Update user
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserRequestDTO userDTO) {
+        UserDTO response = userService.updateUser(id, userDTO);
+        return ResponseEntity.ok(response);
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
         return ResponseEntity.status(204).build(); // 204 No Content
     }
