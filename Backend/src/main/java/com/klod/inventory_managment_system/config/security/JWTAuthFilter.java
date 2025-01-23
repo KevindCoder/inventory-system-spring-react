@@ -17,13 +17,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class JWTAuthFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BEARER_PREFIX = "Bearer: ";
+    private static final String BEARER_PREFIX = "Bearer ";
 
     private final JwtUtil jwtUtil;
     private final UserService userService;
@@ -40,7 +41,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         String username = jwtUtil.extractUsername(token);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var roles = new ArrayList<GrantedAuthority>();
+            List<GrantedAuthority> roles = new ArrayList<>();
             UserDTO user = userService.getUserByUsername(username);
             roles.add(new SimpleGrantedAuthority(user.getRole().name()));
 
@@ -48,6 +49,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                     username, null, roles);
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
+
         chain.doFilter(request, response);
     }
 }

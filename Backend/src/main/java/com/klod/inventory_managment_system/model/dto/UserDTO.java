@@ -1,7 +1,6 @@
 package com.klod.inventory_managment_system.model.dto;
 
 import com.klod.inventory_managment_system.model.entity.Role;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class UserDTO {
 
-    private Integer userId;
+    private Long userId;
 
     private String name;
 

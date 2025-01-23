@@ -36,18 +36,6 @@ public class JwtUtil {
         return extractClaims(token).getSubject();
     }
 
-    public List<String> extractRoles(String token) {
-        return (List<String>) extractClaims(token).get("roles");
-    }
-
-    public boolean validateToken(String token, String username) {
-        return extractUsername(token).equals(username) && !isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
-    }
-
     private SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
