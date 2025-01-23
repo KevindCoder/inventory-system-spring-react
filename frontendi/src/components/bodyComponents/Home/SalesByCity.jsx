@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import ApexCharts from "react-apexcharts";
 
 export default function SalesByCity() {
+
   const donutOption = {
     labels: ["Oujda", "Nador", "Berkan", "Casablanca"],
     legend: {
