@@ -45,27 +45,27 @@ VALUES ('Electronics'),    #1
        ('Sports & Outdoors');
 
 -- Insert into products
-INSERT INTO products (name, brand, stock, purchase_price, sale_price, weight, provider_id, category_id)
-VALUES ('Laptop', 'Dell', 50, 500, 700, '2kg', 1, 1),          #1
-       ('Smartphone', 'Samsung', 100, 300, 500, '200g', 2, 1), #2
-       ('Headphones', 'Sony', 200, 50, 100, '300g', 3, 2),     #3
-       ('Refrigerator', 'LG', 30, 800, 1000, '50kg', 4, 3),    #4
-       ('Microwave', 'Panasonic', 40, 100, 150, '15kg', 5, 3);
+INSERT INTO products (name, brand, stock, price, weight, provider_id, category_id)
+VALUES ('Laptop', 'Dell', 50, 500, '2kg', 1, 1),          #1
+       ('Smartphone', 'Samsung', 100, 300, '200g', 2, 1), #2
+       ('Headphones', 'Sony', 200, 100, '300g', 3, 2),    #3
+       ('Refrigerator', 'LG', 30, 1000, '50kg', 4, 3),    #4
+       ('Microwave', 'Panasonic', 40, 400, '15kg', 5, 3);
 
 -- Insert into orders
-INSERT INTO orders (total_value, provider_id, user_id)
-VALUES (1900, 1, 1), #1
-       (2000, 2, 2), #2
-       (100, 3, 3),  #3
-       (1000, 4, 4), #4
-       (300, 5, 5);
+INSERT INTO orders (customer_id, status)
+VALUES (1, 'INVOICED'), #1
+       (1, 'SHIPPED'), #2
+       (1, 'REJECTED'),  #3
+       (2, 'DELIVERED'), #4
+       (3, 'PICKED');
 
 -- Insert into order_details
-INSERT INTO order_details (order_id, product_id, product_quantity, price)
-VALUES (1, 1, 2, 1400),
-       (1, 2, 1, 500),
-       (2, 2, 3, 1500),
-       (2, 3, 1, 100),
-       (3, 3, 1, 100),
-       (4, 4, 1, 1000),
-       (5, 5, 2, 300);
+INSERT INTO order_details (order_id, product_id, product_quantity)
+VALUES (1, 1, 2),
+       (1, 2, 1),
+       (2, 2, 3),
+       (2, 3, 1),
+       (3, 3, 1),
+       (4, 4, 1),
+       (5, 5, 2);

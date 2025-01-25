@@ -1,7 +1,11 @@
 package com.klod.inventory_managment_system.model.entity;
 
+import com.klod.inventory_managment_system.model.enums.Status;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,17 +28,14 @@ public class OrderEntity extends AuditEntity {
     @Column(name = "order_id")
     private Long orderId;
 
-    @Column(name = "total_value", nullable = false)
-    private Integer totalValue;
-
-    @ManyToOne
-    @JoinColumn(name = "provider_id", nullable = false)
-    private ProviderEntity provider;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity customer;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetailEntity> orderDetails;
 }

@@ -31,7 +31,4 @@ public class OrderDetailEntity extends AuditEntity {
 
     @Column(name = "product_quantity", nullable = false)
     private Integer productQuantity;
-
-    @Column(name = "price", nullable = false)
-    private Integer price;
 }

@@ -1,5 +1,7 @@
 package com.klod.inventory_managment_system.service.impl;
 
+import com.klod.inventory_managment_system.exception.EntityAlreadyExistsException;
+import com.klod.inventory_managment_system.exception.EntityNotFoundException;
 import com.klod.inventory_managment_system.mapper.CustomerMapper;
 import com.klod.inventory_managment_system.model.dto.CustomerDTO;
 import com.klod.inventory_managment_system.model.entity.CustomerEntity;
@@ -22,26 +24,54 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO getCustomerById(Long id) {
         log.info("Attempting to retrieve customer by id: {}", id);
-        CustomerEntity customerEntity = customerRepository.findById(id).orElseThrow();
-        return customerMapper.customerToCustomerDto(customerEntity);
+        CustomerEntity customerEntity = getCustomerEntityById(id);
+        return customerMapper.mapToDTO(customerEntity);
     }
 
     @Override
-    public void saveCustomer(CustomerDTO customerDTO) {
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         log.info("Saving customer: {}", customerDTO);
-        CustomerEntity customerEntity = customerMapper.customerDtoToCustomer(customerDTO);
-        customerRepository.save(customerEntity);
+        validateEmailAvailable(customerDTO.getEmail());
+
+        CustomerEntity customerEntity = customerMapper.mapToEntity(customerDTO);
+        customerEntity = customerRepository.save(customerEntity);
+        return customerMapper.mapToDTO(customerEntity);
+    }
+
+    @Override
+    public CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO) {
+        log.info("Updating customer with id: {}", id);
+        CustomerEntity customerEntity = getCustomerEntityById(id);
+        if (!customerEntity.getEmail().equals(customerDTO.getEmail())) {
+            validateEmailAvailable(customerDTO.getEmail());
+        }
+        customerMapper.updateEntity(customerEntity, customerDTO);
+        customerEntity = customerRepository.save(customerEntity);
+        return customerMapper.mapToDTO(customerEntity);
     }
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
         log.info("Retrieving all customers");
         List<CustomerEntity> customerEntities = customerRepository.findAll();
-        return customerMapper.customerEntitiesToCustomerDTOs(customerEntities);
+        return customerMapper.mapToListDTO(customerEntities);
     }
 
     @Override
     public void deleteCustomerById(Long id) {
-        customerRepository.deleteById(id);
+        log.info("Deleting customer by id: {}", id);
+        CustomerEntity customerEntity = getCustomerEntityById(id);
+        customerRepository.delete(customerEntity);
+    }
+
+    private CustomerEntity getCustomerEntityById(Long id) {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found with id: " + id));
+    }
+
+    private void validateEmailAvailable(String email) {
+        if (!customerRepository.existsByEmail(email)) {
+            throw new EntityAlreadyExistsException("Customer with email: " + email + " already exists");
+        }
     }
 }

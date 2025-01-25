@@ -1,7 +1,7 @@
 package com.klod.inventory_managment_system.api;
 
 import com.klod.inventory_managment_system.model.dto.UserDTO;
-import com.klod.inventory_managment_system.model.dto.UserRequestDTO;
+import com.klod.inventory_managment_system.model.dto.request.UserRequestDTO;
 import com.klod.inventory_managment_system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
