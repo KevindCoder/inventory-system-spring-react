@@ -707,6 +707,116 @@
 			]
 		},
 		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Get status stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/dashboard/status-stats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"dashboard",
+								"status-stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get most sold products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/dashboard/most-sold-products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"dashboard",
+								"most-sold-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get amount sold stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/dashboard/amount-sold-stats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"dashboard",
+								"amount-sold-stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get percentage sold per city",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/dashboard/percentage-sold-per-city",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"dashboard",
+								"percentage-sold-per-city"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "Get out of stock products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/notifications/out-of-stock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"notifications",
+								"out-of-stock"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Login",
 			"event": [
 				{

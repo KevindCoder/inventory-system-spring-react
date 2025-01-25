@@ -2,8 +2,10 @@ package com.klod.inventory_managment_system.api;
 
 import com.klod.inventory_managment_system.model.dto.CustomerDTO;
 import com.klod.inventory_managment_system.service.CustomerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/customers")
+@Validated
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -35,13 +38,13 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> saveCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         CustomerDTO response = customerService.saveCustomer(customerDTO);
         return ResponseEntity.status(201).body(response); // 201 Created
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO) {
         CustomerDTO response = customerService.updateCustomer(id, customerDTO);
         return ResponseEntity.ok(response);
     }

@@ -4,20 +4,18 @@ import com.klod.inventory_managment_system.exception.EntityNotFoundException;
 import com.klod.inventory_managment_system.model.entity.UserEntity;
 import com.klod.inventory_managment_system.repository.UserRepository;
 import com.klod.inventory_managment_system.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -38,19 +36,25 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         }
 
         String token = header.replace(BEARER_PREFIX, "");
-        String username = jwtUtil.extractUsername(token);
+        try {
+            String username = jwtUtil.extractUsername(token);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            List<GrantedAuthority> roles = new ArrayList<>();
-            UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-            UserPrincipal userPrincipal = new UserPrincipal(user);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserEntity user = userRepository.findByUsername(username)
+                        .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userPrincipal, null, userPrincipal.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+                UserPrincipal userPrincipal = new UserPrincipal(user);
+
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userPrincipal, null, userPrincipal.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+            chain.doFilter(request, response);
+        } catch (ExpiredJwtException exception) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token has expired");
+            response.getWriter().flush();
         }
-
-        chain.doFilter(request, response);
     }
 }

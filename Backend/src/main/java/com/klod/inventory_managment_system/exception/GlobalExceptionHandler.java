@@ -4,6 +4,8 @@ import com.klod.inventory_managment_system.model.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -25,6 +27,18 @@ public class GlobalExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         return handleErrorResponse(errorMessage, status);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        BindingResult result = ex.getBindingResult();
+        StringBuilder errorMessages = new StringBuilder();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        result.getAllErrors().forEach(error ->
+                errorMessages.append(error.getDefaultMessage()).append("; ")
+        );
+        return handleErrorResponse(errorMessages.toString(), status);
     }
 
     private ResponseEntity<ErrorResponse> handleErrorResponse(String errorMessage, HttpStatus status) {

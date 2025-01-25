@@ -2,12 +2,12 @@ package com.klod.inventory_managment_system.model.projection;
 
 import com.klod.inventory_managment_system.model.enums.Period;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
-public interface Report1Projection {
-    LocalDate getSaleDate();
+public interface TotalAmountSoldPerDayProjection {
+    Date getSaleDate();
 
-    Integer totalSold();
+    Integer getTotalSold();
 
     Period getPeriod();
 }
