@@ -1,7 +1,7 @@
 package com.klod.inventory_managment_system.service;
 
 import com.klod.inventory_managment_system.model.dto.UserDTO;
-import com.klod.inventory_managment_system.model.dto.UserRequestDTO;
+import com.klod.inventory_managment_system.model.dto.request.UserRequestDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

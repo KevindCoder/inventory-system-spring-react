@@ -4,7 +4,7 @@ import com.klod.inventory_managment_system.exception.EntityAlreadyExistsExceptio
 import com.klod.inventory_managment_system.exception.EntityNotFoundException;
 import com.klod.inventory_managment_system.mapper.UserMapper;
 import com.klod.inventory_managment_system.model.dto.UserDTO;
-import com.klod.inventory_managment_system.model.dto.UserRequestDTO;
+import com.klod.inventory_managment_system.model.dto.request.UserRequestDTO;
 import com.klod.inventory_managment_system.model.entity.UserEntity;
 import com.klod.inventory_managment_system.repository.UserRepository;
 import com.klod.inventory_managment_system.service.UserService;
@@ -35,10 +35,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO saveUser(UserRequestDTO userDTO) {
         log.info("Saving user: {}", userDTO);
-        userRepository.findByUsernameOrEmail(userDTO.getUsername(), userDTO.getEmail())
-                .ifPresent(user -> {
-                    throw new EntityAlreadyExistsException("User already exists with email or username.");
-                });
+
+        validateUsernameValid(userDTO.getUsername());
+        validateEmailValid(userDTO.getEmail());
+
         UserEntity userEntity = userMapper.mapToEntity(userDTO);
         userEntity.setPasswordHash(encryptPassword(userDTO.getPassword()));
         userEntity = userRepository.save(userEntity);
@@ -49,6 +49,12 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUser(Long id, UserRequestDTO userDTO) {
         log.info("Updating user with id: {}", id);
         UserEntity userEntity = getUserEntityById(id);
+        if (!userEntity.getUsername().equals(userDTO.getUsername())) {
+            validateUsernameValid(userDTO.getUsername());
+        }
+        if (userEntity.getEmail().equals(userDTO.getEmail())) {
+            validateUsernameValid(userDTO.getEmail());
+        }
         userMapper.updateEntity(userEntity, userDTO);
         userEntity.setPasswordHash(encryptPassword(userDTO.getPassword()));
         userEntity = userRepository.save(userEntity);
@@ -80,6 +86,18 @@ public class UserServiceImpl implements UserService {
     private UserEntity getUserEntityById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+    }
+
+    private void validateUsernameValid(String username) {
+        if (!userRepository.existsByUsername(username)) {
+            throw new EntityAlreadyExistsException("User with username: " + username + " already exists");
+        }
+    }
+
+    private void validateEmailValid(String email) {
+        if (!userRepository.existsByEmail(email)) {
+            throw new EntityAlreadyExistsException("User with email: " + email + " already exists");
+        }
     }
 
     private String encryptPassword(String password) {

@@ -1,7 +1,7 @@
 package com.klod.inventory_managment_system.api;
 
 import com.klod.inventory_managment_system.model.dto.JwtResponse;
-import com.klod.inventory_managment_system.model.dto.LoginRequest;
+import com.klod.inventory_managment_system.model.dto.request.LoginRequestDTO;
 import com.klod.inventory_managment_system.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequestDTO request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 }

@@ -1,7 +1,7 @@
 package com.klod.inventory_managment_system.service.impl;
 
 import com.klod.inventory_managment_system.model.dto.JwtResponse;
-import com.klod.inventory_managment_system.model.dto.LoginRequest;
+import com.klod.inventory_managment_system.model.dto.request.LoginRequestDTO;
 import com.klod.inventory_managment_system.service.AuthService;
 import com.klod.inventory_managment_system.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public JwtResponse authenticate(LoginRequest request) {
+    public JwtResponse authenticate(LoginRequestDTO request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())

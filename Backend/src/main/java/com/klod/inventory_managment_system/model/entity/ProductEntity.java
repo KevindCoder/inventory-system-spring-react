@@ -30,11 +30,8 @@ public class ProductEntity extends AuditEntity {
     @Column(name = "stock", nullable = false)
     private Integer stock;
 
-    @Column(name = "purchase_price", nullable = false)
-    private Integer purchasePrice;
-
-    @Column(name = "sale_price", nullable = false)
-    private Integer salePrice;
+    @Column(name = "price", nullable = false)
+    private Integer price;
 
     @Column(name = "weight", length = 20)
     private String weight;

@@ -5,7 +5,8 @@ import java.util.List;
 
 public interface ProviderService {
     ProviderDTO getProviderById(Long id);
-    void saveProvider(ProviderDTO providerDTO);
+    ProviderDTO saveProvider(ProviderDTO providerDTO);
+    ProviderDTO updateProvider(Long id, ProviderDTO providerDTO);
     List<ProviderDTO> getAllProviders();
     void deleteProviderById(Long id);
 }
