@@ -1,4 +1,4 @@
-package com.klod.inventory_managment_system.model.dto;
+package com.klod.inventory_managment_system.model.dto.request;
 
 import com.klod.inventory_managment_system.model.entity.Role;
 import lombok.Getter;

@@ -9,10 +9,9 @@ public class ProductDTO {
     private Long productId;
     private String name;
     private String brand;
-    private int stock;
-    private int purchasePrice;
-    private int salePrice;
+    private Integer stock;
+    private Integer price;
     private String weight;
-    private Long providerId;
-    private Long categoryId;
+    private String categoryName;
+    private String providerName;
 }

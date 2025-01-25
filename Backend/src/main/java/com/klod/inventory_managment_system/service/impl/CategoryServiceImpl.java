@@ -72,7 +72,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<ProductDTO> getCategoryProducts(Long id) {
         log.info("Retrieving products for category: {}", id);
         CategoryEntity categoryEntity = getCategoryEntityById(id);
-        return productMapper.productEntitiesToProductDTOs(categoryEntity.getProducts());
+        return productMapper.mapToListDTO(categoryEntity.getProducts());
     }
 
     private CategoryEntity getCategoryEntityById(Long id) {
@@ -81,9 +81,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private void validateNameAvailable(String name) {
-        categoryRepository.findByName(name)
-                .ifPresent(category -> {
-                    throw new EntityAlreadyExistsException("Category already exits with name: " + category.getName());
-                });
+        if (!categoryRepository.existsByName(name)) {
+            throw new EntityAlreadyExistsException("Category with name: " + name + " already exists");
+        }
     }
 }
