@@ -1,93 +1,77 @@
 import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // If you're using react-router
+import { useNavigate } from "react-router-dom";
+import { login } from "../services/auth.js";
+import {useAuth} from "../context/AuthContext.jsx"; // Import the login function from auth.js
 
 const LoginPage = () => {
-  const [error, setError] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // For redirecting after successful login
-
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const { loginUser, role, accessToken } = useAuth(); // Access loginUser and role from context
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Reset error
     setError(null);
 
-    // Mock login request (replace with your actual authentication logic)
     try {
-      // Replace this with actual API call
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const  role1 = await loginUser(username, password);
+      console.log(role,"rolelelele",loginUser,"loginuser",accessToken,"acestoken")
+      // Login using the context function
+      console.log("Role eshte: ", role1);
+      // Redirect based on role
+      if (role === "ROLE_ADMIN") {
 
-      if (!response.ok) {
-        throw new Error("Invalid credentialss");
+        navigate("/admin/dashboard");
+      } else if (role === "ROLE_MANAGER") {
+        navigate("/manager/dashboard");
+      } else {
+        navigate("/unathorized");
       }
-
-      // If login is successful, redirect to a protected route
-      navigate("/dashboard"); // Replace with the actual route you want to redirect to
     } catch (error) {
-      setError(error.message); // Set error if login fails
+      setError(error.message);
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginTop: 8,
-        }}
-      >
-        <Typography variant="h5">Login</Typography>
+      <Container component="main" maxWidth="xs">
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 8 }}>
+          <Typography variant="h5">Login</Typography>
 
-        {/* Error Message */}
-        {error && <div style={{ color: "red", marginTop: 10 }}>{error}</div>}
+          {error && <div style={{ color: "red", marginTop: 10 }}>{error}</div>}
 
-        <form onSubmit={handleSubmit} style={{ width: "100%", marginTop: 20 }}>
-          {/* Username Field */}
-          <TextField
-            label="Username"
-            variant="outlined"
-            fullWidth
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            margin="normal"
-          />
-
-          {/* Password Field */}
-          <TextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            fullWidth
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            margin="normal"
-          />
-
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Login
-          </Button>
-        </form>
-      </Box>
-    </Container>
+          <form onSubmit={handleSubmit} style={{ width: "100%", marginTop: 20 }}>
+            <TextField
+                label="Username"
+                variant="outlined"
+                fullWidth
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                margin="normal"
+            />
+            <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                margin="normal"
+            />
+            <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{ mt: 3, mb: 2 }}
+            >
+              Login
+            </Button>
+          </form>
+        </Box>
+      </Container>
   );
 };
 
