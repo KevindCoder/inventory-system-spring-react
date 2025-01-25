@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom";
-import {Box, CircularProgress, Container} from "@mui/material";
+import {Box, CircularProgress, Container, ThemeProvider} from "@mui/material";
 import {getRole, isLoggedIn} from "./services/auth.js";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import Unauthorized from "./pages/Unathorized.jsx";
 import ManagerDashboard from "./pages/ManagerDashboard.jsx";
 import EmployeeDashboard from "./pages/EmployeeDashboard.jsx";
 import LoginPage from "./components/LoginPage.jsx";
-import {useAuth} from "./context/AuthContext.jsx"; // Adjust path as necessary
+import {useAuth} from "./context/AuthContext.jsx";
+import {theme} from "./components/utils/theme.js"; // Adjust path as necessary
 const ProtectedRoute = ({element, allowedRoles}) => {
     const {accessToken, role} = useAuth();
 
@@ -52,53 +53,55 @@ const App = () => {
     }
 
     return (
-        <Router>
-            <Container component="main" maxWidth="xs">
-                <Routes>
-                    {/* Public Route */}
-                    <Route
-                        path="/login"
-                        element={
-                            isAuthenticated && role ? (
-                                <Navigate to={`/${role.toLowerCase().split("_")[1]}/dashboard`}/>
-                            ) : (
-                                <LoginPage/>
-                            )
-                        }
-                    />
+        <ThemeProvider theme={theme}>
+            <Router>
+                <Container component="main" maxWidth="xs">
+                    <Routes>
+                        {/* Public Route */}
+                        <Route
+                            path="/login"
+                            element={
+                                isAuthenticated && role ? (
+                                    <Navigate to={`/${role.toLowerCase().split("_")[1]}/dashboard`}/>
+                                ) : (
+                                    <LoginPage/>
+                                )
+                            }
+                        />
 
-                    {/* Protected Routes */}
-                    <Route
-                        path="/admin/dashboard"
-                        element={
-                            <ProtectedRoute element={<AdminDashboard/>} allowedRoles={["ROLE_ADMIN"]}/>
-                        }
-                    />
-                    <Route
-                        path="/manager/dashboard"
-                        element={
-                            <ProtectedRoute element={<ManagerDashboard/>} allowedRoles={["ROLE_MANAGER"]}/>
-                        }
-                    />
-                    <Route
-                        path="/employee/dashboard"
-                        element={
-                            <ProtectedRoute element={<EmployeeDashboard/>} allowedRoles={["ROLE_EMPLOYEE"]}/>
-                        }
-                    />
-                    <Route path="/unathorized"
-                           element={
-                               <ProtectedRoute element={<Unauthorized/>}/>
-                           }
-                    />
+                        {/* Protected Routes */}
+                        <Route
+                            path="/admin/dashboard"
+                            element={
+                                <ProtectedRoute element={<AdminDashboard/>} allowedRoles={["ROLE_ADMIN"]}/>
+                            }
+                        />
+                        <Route
+                            path="/manager/dashboard"
+                            element={
+                                <ProtectedRoute element={<ManagerDashboard/>} allowedRoles={["ROLE_MANAGER"]}/>
+                            }
+                        />
+                        <Route
+                            path="/employee/dashboard"
+                            element={
+                                <ProtectedRoute element={<EmployeeDashboard/>} allowedRoles={["ROLE_EMPLOYEE"]}/>
+                            }
+                        />
+                        <Route path="/unathorized"
+                               element={
+                                   <ProtectedRoute element={<Unauthorized/>}/>
+                               }
+                        />
 
-                {/* Fallback for Unknown Routes */}
-                <Route path="*" element={<Navigate to="/login"/>}/>
-            </Routes>
-        </Container>
-</Router>
-)
-    ;
+                        {/* Fallback for Unknown Routes */}
+                        <Route path="*" element={<Navigate to="/login"/>}/>
+                    </Routes>
+                </Container>
+            </Router>
+        </ThemeProvider>
+
+);
 };
 
 export default App;
