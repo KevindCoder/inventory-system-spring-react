@@ -3,8 +3,10 @@ package com.klod.inventory_managment_system.api;
 import com.klod.inventory_managment_system.model.dto.CategoryDTO;
 import com.klod.inventory_managment_system.model.dto.ProductDTO;
 import com.klod.inventory_managment_system.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/categories")
+@Validated
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -36,13 +39,13 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> saveCategory(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> saveCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         CategoryDTO response = categoryService.saveCategory(categoryDTO);
         return ResponseEntity.status(201).body(response); // 201 Created
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
         CategoryDTO response = categoryService.updateCategory(id, categoryDTO);
         return ResponseEntity.ok(response);
     }

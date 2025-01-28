@@ -1,6 +1,7 @@
 package com.klod.inventory_managment_system.mapper;
 
 import com.klod.inventory_managment_system.config.MapperConfig;
+import com.klod.inventory_managment_system.model.dto.OutOfStockDTO;
 import com.klod.inventory_managment_system.model.dto.ProductDTO;
 import com.klod.inventory_managment_system.model.dto.request.ProductRequestDTO;
 import com.klod.inventory_managment_system.model.entity.ProductEntity;
@@ -27,4 +28,9 @@ public interface ProductMapper {
     void updateEntity(@MappingTarget ProductEntity entity, ProductRequestDTO dto);
 
     List<ProductDTO> mapToListDTO(List<ProductEntity> entities);
+
+    @Mapping(target = "productName", source = "name")
+    OutOfStockDTO mapToOutOfStockDTO(ProductEntity entity);
+
+    List<OutOfStockDTO> mapToOutOfStockListDTO(List<ProductEntity> products);
 }

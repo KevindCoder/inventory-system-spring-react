@@ -4,8 +4,10 @@ import com.klod.inventory_managment_system.model.dto.OrderDTO;
 import com.klod.inventory_managment_system.model.dto.request.OrderRequestDTO;
 import com.klod.inventory_managment_system.model.enums.Status;
 import com.klod.inventory_managment_system.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/orders")
+@Validated
 public class OrderController {
 
     private final OrderService orderService;
@@ -38,13 +41,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> saveOrder(@RequestBody OrderRequestDTO orderDTO) {
+    public ResponseEntity<OrderDTO> saveOrder(@Valid @RequestBody OrderRequestDTO orderDTO) {
         OrderDTO response = orderService.saveOrder(orderDTO);
         return ResponseEntity.status(201).body(response); // 201 Created
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @RequestParam Status status) {
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @Valid @RequestParam Status status) {
         OrderDTO response = orderService.updateOrderStatus(id, status);
         return ResponseEntity.ok(response);
     }

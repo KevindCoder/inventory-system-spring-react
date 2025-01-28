@@ -2,8 +2,10 @@ package com.klod.inventory_managment_system.api;
 
 import com.klod.inventory_managment_system.model.dto.ProviderDTO;
 import com.klod.inventory_managment_system.service.ProviderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/providers")
+@Validated
 public class ProviderController {
 
     private final ProviderService providerService;
@@ -35,13 +38,13 @@ public class ProviderController {
     }
 
     @PostMapping
-    public ResponseEntity<ProviderDTO> saveProvider(@RequestBody ProviderDTO providerDTO) {
+    public ResponseEntity<ProviderDTO> saveProvider(@Valid @RequestBody ProviderDTO providerDTO) {
         ProviderDTO response = providerService.saveProvider(providerDTO);
         return ResponseEntity.status(201).body(response); // 201 Created
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ProviderDTO> updateProvider(@PathVariable Long id, @RequestBody ProviderDTO providerDTO) {
+    public ResponseEntity<ProviderDTO> updateProvider(@PathVariable Long id, @Valid @RequestBody ProviderDTO providerDTO) {
         ProviderDTO response = providerService.updateProvider(id, providerDTO);
         return ResponseEntity.ok(response);
     }
