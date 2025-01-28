@@ -35,7 +35,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO saveUser(UserRequestDTO userDTO) {
         log.info("Saving user: {}", userDTO);
-
+        if(userRepository.existsByUsername(userDTO.getUsername())){
+            throw new IllegalArgumentException("User with username: " + userDTO.getUsername() + " already exists");
+        }
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new IllegalArgumentException("User with email: " + userDTO.getEmail() + " already exists");
+        }
         validateUsernameValid(userDTO.getUsername());
         validateEmailValid(userDTO.getEmail());
 
@@ -49,12 +54,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUser(Long id, UserRequestDTO userDTO) {
         log.info("Updating user with id: {}", id);
         UserEntity userEntity = getUserEntityById(id);
-        if (!userEntity.getUsername().equals(userDTO.getUsername())) {
-            validateUsernameValid(userDTO.getUsername());
-        }
-        if (userEntity.getEmail().equals(userDTO.getEmail())) {
-            validateUsernameValid(userDTO.getEmail());
-        }
+
         userMapper.updateEntity(userEntity, userDTO);
         userEntity.setPasswordHash(encryptPassword(userDTO.getPassword()));
         userEntity = userRepository.save(userEntity);
@@ -89,13 +89,13 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateUsernameValid(String username) {
-        if (!userRepository.existsByUsername(username)) {
+        if (userRepository.existsByUsername(username)) {
             throw new EntityAlreadyExistsException("User with username: " + username + " already exists");
         }
     }
 
     private void validateEmailValid(String email) {
-        if (!userRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             throw new EntityAlreadyExistsException("User with email: " + email + " already exists");
         }
     }
