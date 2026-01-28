@@ -27,7 +27,7 @@
     "react-charts": "^3.0.0-beta.38",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
-    "victory": "^36.5.3",
+    "victory": "^36.9.2",
     "vite-plugin-compression": "^0.5.1"
   },
   "devDependencies": {
